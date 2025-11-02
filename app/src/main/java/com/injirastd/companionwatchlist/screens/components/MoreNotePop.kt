@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.injirastd.companionwatchlist.R
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.injirastd.companionwatchlist.R
@@ -36,7 +37,7 @@ fun MoreNotePop(
     onDismiss: () -> Unit,
     notes: String
 ) {
-    val primaryColor = colorResource(id = R.color.polynesian_blue)   // Your main brand color
+    val primaryColor = colorResource(id = R.color.colorful)   // Your main brand color
     val surfaceColor = colorResource(id = R.color.white)       // Background for dialog
     val cardColor = colorResource(id = R.color.light_bg_color)     // Background for product cards
     val textColor = colorResource(id = R.color.black)          // Normal text

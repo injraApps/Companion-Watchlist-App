@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import com.injirastd.companionwatchlist.R
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.*
@@ -26,7 +27,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.injirastd.companionwatchlist.R
 import com.injirastd.companionwatchlist.model.WatchListEntity
 import com.injirastd.companionwatchlist.utils.DatePickerField
 import com.injirastd.companionwatchlist.utils.StatusBarColor
@@ -41,7 +41,7 @@ import kotlin.random.Random
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddToWatchlistScreen(navController: NavController) {
-    val backgroundColor = colorResource(id = R.color.polynesian_blue)
+    val backgroundColor = colorResource(id = R.color.colorful)
     StatusBarColor(backgroundColor)
 
     val context = LocalContext.current
@@ -147,26 +147,50 @@ fun AddToWatchlistScreen(navController: NavController) {
             ) {
                 Button(
                     onClick = {
-                    if(title.isNotEmpty()  && watchlistPageNo.isNotEmpty() && type.isNotEmpty() && category.isNotEmpty()){
-                       watchListViewModel.insertWatchlist(
-                           WatchListEntity(
-                               watchListTitle = title,
-                               expectedCompleteDate = selectedDate,
-                               link = link,
-                               type = type,
-                               notes = notes,
-                               category = category,
-                               noEpisodesPage = watchlistPageNo.toInt(),
-                               watchlistId = generateSixDigitRandomNumber().toString()
-                               )
-                       )
-                    navController.popBackStack()
-                        Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
-                    }else{
-                        Toast.makeText(context, "Please fill all the fields", Toast.LENGTH_SHORT).show()
-                    }
+                        when {
+                            title.isEmpty() -> {
+                                Toast.makeText(context, "Please enter a title", Toast.LENGTH_LONG).show()
+                                return@Button
+                            }
 
-                    /* TODO: Handle click */ },
+                            watchlistPageNo.isEmpty() -> {
+                                Toast.makeText(context, "Please enter Watchlist Page or Episode number", Toast.LENGTH_LONG).show()
+                                return@Button
+                            }
+
+                            type.isEmpty() -> {
+                                Toast.makeText(context, "Please select Watchlist Type", Toast.LENGTH_LONG).show()
+                                return@Button
+                            }
+
+                            category.isEmpty() -> {
+                                Toast.makeText(context, "Please select Watchlist Category", Toast.LENGTH_LONG).show()
+                                return@Button
+                            }
+
+                            selectedDate.isEmpty() -> {
+                                Toast.makeText(context, "Please select Expected Completion Date", Toast.LENGTH_LONG).show()
+                                return@Button
+                            }
+
+                            else -> {
+                                watchListViewModel.insertWatchlist(
+                                    WatchListEntity(
+                                        watchListTitle = title,
+                                        expectedCompleteDate = selectedDate,
+                                        link = link,
+                                        type = type,
+                                        notes = notes,
+                                        category = category,
+                                        noEpisodesPage = watchlistPageNo.toInt(),
+                                        watchlistId = generateSixDigitRandomNumber().toString()
+                                    )
+                                )
+                                navController.popBackStack()
+                                Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp),
@@ -202,18 +226,6 @@ fun AddToWatchlistScreen(navController: NavController) {
                 .verticalScroll(rememberScrollState())
         ) {
 
-
-
-
-//            // Title
-//            Text(
-//                text = "Add Watchlist",
-//                modifier = Modifier
-//                    .padding(end = 16.dp, start = 16.dp),
-//                style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-//                color = colorResource(id=R.color.dark)
-//            )
-//                    Spacer(modifier = Modifier.height(8.dp))
             // Subtitle
             Text(
                 text = "Enter the Details of TV shows that " +
@@ -247,7 +259,7 @@ fun AddToWatchlistScreen(navController: NavController) {
                 OutlinedTextField(
                     value = link ,
                     onValueChange = { link  = it },
-                    label = { Text("link") },
+                    label = { Text("link(optional)") },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
                         unfocusedContainerColor = Color.White.copy(alpha = 0.9f),
@@ -261,7 +273,7 @@ fun AddToWatchlistScreen(navController: NavController) {
                 )
 
                 Text(
-                    text = "Enter the Details or Notes of Book/Tv show use markup for styling",
+                    text = "Enter the Details or Notes of Book/Tv (optional)",
                     modifier = Modifier
                         .padding(end = 16.dp, start = 16.dp),
                     style = MaterialTheme.typography.bodyMedium,
@@ -303,7 +315,6 @@ fun AddToWatchlistScreen(navController: NavController) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .menuAnchor(MenuAnchorType.PrimaryNotEditable),
-//                        .menuAnchor(),
                         trailingIcon = {
                             ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
                         },
@@ -362,11 +373,10 @@ fun AddToWatchlistScreen(navController: NavController) {
                         value = category,
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("Category") },
+                        label = { Text("Category*") },
                         modifier = Modifier
                             .fillMaxWidth()
                             .menuAnchor(MenuAnchorType.PrimaryNotEditable),
-//                        .menuAnchor(),
                         trailingIcon = {
                             ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded01)
                         },
@@ -399,7 +409,7 @@ fun AddToWatchlistScreen(navController: NavController) {
                     }
                 }
                 DatePickerField(
-                    label = "Expected completion date",
+                    label = "Expected completion date*",
                     value = selectedDate, // <-- This is from your parent state
                     onDateSelected = { date -> selectedDate = date }
                 )
@@ -492,33 +502,9 @@ fun DropdownSelector(
 }
 
 
-//@Composable
-//fun DropdownSelector(items: List<String>, selected: String?, onSelected: (String) -> Unit) {
-//    var expanded by remember { mutableStateOf(false) }
-//    Box {
-//        OutlinedButton(onClick = { expanded = true }) {
-//            Text(selected ?: "Select")
-//        }
-//        DropdownMenu(
-//            expanded = expanded,
-//            onDismissRequest = { expanded = false }
-//        ) {
-//            items.forEach { item ->
-//                DropdownMenuItem(
-//                    text = { Text(item) },
-//                    onClick = {
-//                        onSelected(item)
-//                        expanded = false
-//                    }
-//                )
-//            }
-//        }
-//    }
-//}
 
 
 
 fun generateSixDigitRandomNumber(): Int {
     return Random.nextInt(1000000, 1000000000)  // Generates a random number between 100000 (inclusive) and 1000000 (exclusive)
 }
-

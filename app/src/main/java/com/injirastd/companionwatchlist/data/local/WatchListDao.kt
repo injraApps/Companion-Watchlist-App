@@ -43,4 +43,11 @@ interface WatchListDao {
     suspend fun updateSeenPageEpisodeById(watchlistId: String, seenPageEpisode: Int): Int?
 
 
+    @Query("""
+        UPDATE watchlist 
+        SET seenPageEpisode = :newEpisode, 
+            status = CASE WHEN :newEpisode = noEpisodesPage THEN 'complete' ELSE 'incomplete' END
+        WHERE watchlistId = :watchlistId
+    """)
+    suspend fun updateSeenEpisode(watchlistId: String, newEpisode: Int)
 }

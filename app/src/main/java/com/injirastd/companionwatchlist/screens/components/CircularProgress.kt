@@ -13,11 +13,11 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import com.injirastd.companionwatchlist.R
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.injirastd.companionwatchlist.R
 
 @Composable
 fun CircularPercentageBar(
@@ -25,8 +25,8 @@ fun CircularPercentageBar(
     modifier: Modifier = Modifier,
     radius: Float = 25f,
     strokeWidth: Float = 8f,
-    colorPaid: Color = colorResource(id = R.color.royal_blue_traditional), // Green
-    colorUnpaid: Color = colorResource(id = R.color.text_gray), // Grayish
+    colorMarked: Color = colorResource(id = R.color.colorful), // Green
+    colorUnMarked: Color = colorResource(id = R.color.gray01), // Grayish
 ) {
     val animatedProgress by animateFloatAsState(
         targetValue = percentage,
@@ -47,7 +47,7 @@ fun CircularPercentageBar(
                 (size.height - diameter) / 2f
             )
             drawArc(
-                color = colorUnpaid,
+                color = colorUnMarked,
                 startAngle = -90f,
                 sweepAngle = 360f,
                 useCenter = false,
@@ -57,7 +57,7 @@ fun CircularPercentageBar(
             )
 
             drawArc(
-                color = colorPaid,
+                color = colorMarked,
                 startAngle = -90f,
                 sweepAngle = 360 * animatedProgress,
                 useCenter = false,
@@ -69,7 +69,7 @@ fun CircularPercentageBar(
 
         Text(
             text = "${(percentage * 100).toInt()}%",
-            color = colorPaid,
+            color = colorMarked,
             fontSize = 12.sp
         )
     }

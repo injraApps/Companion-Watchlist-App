@@ -6,14 +6,15 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.injirastd.companionwatchlist.model.ProgressEntity
 import com.injirastd.companionwatchlist.model.WatchListEntity
 
 
-@Database(entities = [WatchListEntity::class], version = 2, exportSchema = false)
+@Database(entities = [WatchListEntity::class, ProgressEntity::class], version = 3, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun watchListDao(): WatchListDao
-
+    abstract fun progressDao(): ProgressDao
 
     companion object {
         @Volatile
